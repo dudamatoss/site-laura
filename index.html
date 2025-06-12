@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Dia dos Namorados</title>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <style>
+    @keyframes pulseHeart {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-60px);
+      }
+    }
+    .heart-pulse {
+      animation: pulseHeart 1s infinite;
+    }
+    .neon-text {
+      color: #fff;
+      text-shadow: 0 0 2px #c0f, 0 0 6px #c0f;
+    }
+    .neon-box {
+      box-shadow: 0 0 6px #c0f, 0 0 12px #c0f;
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    .baloon {
+      position: relative;
+      background: #1a1a1a;
+      border-radius: 15px;
+      padding: 15px;
+      max-width: 300px;
+      margin: 0 auto;
+      box-shadow: 0 0 8px #c0f;
+    }
+    .baloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: #1a1a1a transparent transparent transparent;
+    }
+  </style>
+</head>
+<body class="bg-black min-h-screen flex flex-col items-center text-center font-sans select-none">
+  <header class="mt-6">
+    <h1 class="text-4xl md:text-6xl font-bold neon-text flex items-center gap-3">
+      <span>Feliz Dia dos Namorados</span>
+      <span class="text-5xl">❤️</span>
+    </h1>
+  </header>
+
+  <!-- Carrossel -->
+  <div class="w-full max-w-sm mt-10 px-4">
+    <div class="relative neon-box rounded-2xl overflow-hidden aspect-[1/1]">
+      <div id="carousel" class="h-full w-full overflow-hidden">
+        <div id="carousel-inner" class="flex transition-transform duration-500 ease-in-out h-full">
+          <img src="assets/foto1.jpeg" class="object-cover w-full h-full flex-shrink-0 rounded-2xl" alt="Foto 1">
+          <img src="assets/foto2.jpeg" class="object-cover w-full h-full flex-shrink-0 rounded-2xl" alt="Foto 2">
+          <img src="assets/foto3.jpeg" class="object-cover w-full h-full flex-shrink-0 rounded-2xl" alt="Foto 3">
+          <img src="assets/foto4.jpeg" class="object-cover w-full h-full flex-shrink-0 rounded-2xl" alt="Foto 4">
+          <img src="assets/foto5.jpeg" class="object-cover w-full h-full flex-shrink-0 rounded-2xl" alt="Foto 5">
+          <img src="assets/foto6.jpeg" class="object-cover w-full h-full flex-shrink-0 rounded-2xl" alt="Foto 6">
+        </div>
+      </div>
+      <div class="absolute inset-0 flex items-center justify-between px-2">
+        <button onclick="prevSlide()" class="bg-black/30 text-white text-xs p-1 rounded-full opacity-20 hover:opacity-50">⟨</button>
+        <button onclick="nextSlide()" class="bg-black/30 text-white text-xs p-1 rounded-full opacity-20 hover:opacity-50">⟩</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contador de tempo -->
+  <div class="mt-10 text-lg md:text-2xl font-medium neon-text px-6" id="contador"></div>
+
+  <!-- Coração pulsando -->
+  <div class="mt-10 mb-16">
+    <button id="heartButton" class="text-6xl heart-pulse text-pink-500 focus:outline-none">❤️</button>
+    <div id="mensagem" class="mt-4 hidden opacity-0 transition-opacity duration-500">
+      <div class="baloon fade-in text-white text-lg">
+        A cada dia que passa te amo mais e continuarei amando para todo o sempre! Feliz Dia Dos Namorados
+      </div>
+    </div>
+  </div>
+
+  <!-- Música de fundo -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="assets/music.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio HTML5.
+  </audio>
+
+  <script>
+    // Carrossel
+    let currentSlide = 0;
+    const carouselInner = document.getElementById('carousel-inner');
+    const totalSlides = carouselInner.children.length;
+
+    function updateSlide() {
+      carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      updateSlide();
+    }
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      updateSlide();
+    }
+
+    // Contador de tempo
+    const dataInicio = new Date("2024-05-22T15:00:00");
+    const contador = document.getElementById("contador");
+
+    function atualizarContador() {
+      const agora = new Date();
+      let diff = agora - dataInicio;
+
+      const segundos = Math.floor(diff / 1000) % 60;
+      const minutos = Math.floor(diff / 60000) % 60;
+      const horas = Math.floor(diff / 3600000) % 24;
+      const diasTotais = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const semanas = Math.floor(diasTotais / 7) % 4;
+      const meses = Math.floor(diasTotais / 30.44) % 12;
+      const anos = Math.floor(diasTotais / 365.25);
+      const dias = diasTotais % 30;
+
+      contador.textContent = `${anos} Ano(s), ${meses} Mês(es), ${semanas} Semana(s), ${dias} Dia(s), ${horas} Hora(s), ${minutos} Minuto(s), ${segundos} Segundo(s)`;
+    }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    // Mensagem de amor ao clicar no coração
+    const heartButton = document.getElementById("heartButton");
+    const mensagem = document.getElementById("mensagem");
+
+    heartButton.addEventListener("click", () => {
+      if (mensagem.classList.contains("hidden")) {
+        mensagem.classList.remove("hidden");
+        mensagem.classList.add("fade-in");
+        mensagem.classList.remove("opacity-0");
+      } else {
+        mensagem.classList.add("hidden");
+        mensagem.classList.remove("fade-in");
+        mensagem.classList.add("opacity-0");
+      }
+    });
+
+    // Emojis flutuando ao clicar na tela
+    document.addEventListener("click", (e) => {
+      if (e.target.id === "heartButton") return;
+      const emoji = document.createElement("div");
+      emoji.textContent = Math.random() > 0.5 ? "❤️" : "💍";
+      emoji.className = "absolute pointer-events-none";
+      emoji.style.left = `${e.clientX}px`;
+      emoji.style.top = `${e.clientY}px`;
+      emoji.style.fontSize = "2rem";
+      emoji.style.animation = "floatUp 1s ease-out forwards";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 1000);
+    });
+  </script>
+</body>
+</html>
